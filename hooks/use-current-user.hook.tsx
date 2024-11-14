@@ -77,8 +77,10 @@ export default function useCurrentUser() {
 				params: [{ chainId: chainId }],
 			});
 			setChainId(chainId);
+			alert('Chain switch succeeded:');
 		} catch (error) {
 			console.error('Chain switch failed:', error);
+			alert('Chain switch failed:');
 		}
 	};
 
