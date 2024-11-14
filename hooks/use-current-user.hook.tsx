@@ -8,7 +8,7 @@
 import { useEffect, useState } from 'react';
 
 export const TESTNET_PARAMS = {
-	chainId: '0x545',
+	chainId: '545',
 	chainName: 'Flow',
 	rpcUrls: ['https://testnet.evm.nodes.onflow.org'],
 	nativeCurrency: {
@@ -20,7 +20,7 @@ export const TESTNET_PARAMS = {
 };
 
 export const MAINNET_PARAMS = {
-	chainId: '0x747',
+	chainId: '747',
 	chainName: 'Flow',
 	rpcUrls: ['https://mainnet.evm.nodes.onflow.org'],
 	nativeCurrency: {
