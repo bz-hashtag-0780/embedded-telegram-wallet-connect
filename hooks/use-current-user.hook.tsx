@@ -95,20 +95,6 @@ export default function useCurrentUser() {
 		setUserAddr(null);
 	};
 
-	// const switchChain = async (chainId: any) => {
-	// 	try {
-	// 		await walletSdk.ethereum.request({
-	// 			method: 'wallet_switchEthereumChain',
-	// 			params: [{ chainId: chainId }],
-	// 		});
-	// 		setChainId(chainId);
-	// 		alert('Chain switch succeeded:');
-	// 	} catch (error) {
-	// 		console.error('Chain switch failed:', error);
-	// 		alert('Chain switch failed');
-	// 	}
-	// };
-
 	const switchChain = async (chainId: any) => {
 		try {
 			await walletSdk.ethereum.request({
@@ -116,26 +102,16 @@ export default function useCurrentUser() {
 				params: [{ chainId: chainId }],
 			});
 			setChainId(chainId);
-			alert('Chain switch succeeded');
 		} catch (error: any) {
-			// else {
-			// 4902 indicates the chain has not been added
 			try {
 				await walletSdk.ethereum.request({
 					method: 'wallet_addEthereumChain',
 					params: [MAINNET_PARAMS], // Or TESTNET_PARAMS for testnet
 				});
 				setChainId(chainId);
-				alert('Flow EVM successfully added and switched');
 			} catch (addError) {
 				console.error('Adding Flow EVM failed:', addError);
-				alert('Flow EVM could not be added and switched');
 			}
-			// }
-			// else {
-			// 	console.error('Chain switch failed:', error);
-			// 	alert('Chain switch failed');
-			// }
 		}
 	};
 
