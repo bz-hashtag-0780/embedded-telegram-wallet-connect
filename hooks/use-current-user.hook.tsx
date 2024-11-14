@@ -10,7 +10,7 @@ export default function useCurrentUser() {
 	const [userAddr, setUserAddr] = useState(null);
 	const [chainId, setChainId] = useState<any>(null);
 	const [walletSdk, setWalletSdk] = useState<any>(null);
-	const DEFAULT_CHAIN_ID = '0x38'; // Flow EVM Mainnet: 747 Flow EVM Testnet: 545
+	const DEFAULT_CHAIN_ID = '0x545'; // Flow EVM Mainnet: 747 Flow EVM Testnet: 545
 
 	useEffect(() => {
 		// Only initialize the SDK on the client
