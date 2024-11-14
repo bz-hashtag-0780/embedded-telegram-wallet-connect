@@ -6,6 +6,30 @@
 
 import { useEffect, useState } from 'react';
 
+export const TESTNET_PARAMS = {
+	chainId: '0x545',
+	chainName: 'Flow',
+	rpcUrls: ['https://testnet.evm.nodes.onflow.org'],
+	nativeCurrency: {
+		name: 'Flow',
+		symbol: 'FLOW',
+		decimals: 18,
+	},
+	blockExplorerUrls: ['https://evm-testnet.flowscan.io/'],
+};
+
+export const MAINNET_PARAMS = {
+	chainId: '0x747',
+	chainName: 'Flow',
+	rpcUrls: ['https://mainnet.evm.nodes.onflow.org'],
+	nativeCurrency: {
+		name: 'Flow',
+		symbol: 'FLOW',
+		decimals: 18,
+	},
+	blockExplorerUrls: ['https://evm.flowscan.io/'],
+};
+
 export default function useCurrentUser() {
 	const [userAddr, setUserAddr] = useState(null);
 	const [chainId, setChainId] = useState<any>(null);
@@ -70,6 +94,20 @@ export default function useCurrentUser() {
 		setUserAddr(null);
 	};
 
+	// const switchChain = async (chainId: any) => {
+	// 	try {
+	// 		await walletSdk.ethereum.request({
+	// 			method: 'wallet_switchEthereumChain',
+	// 			params: [{ chainId: chainId }],
+	// 		});
+	// 		setChainId(chainId);
+	// 		alert('Chain switch succeeded:');
+	// 	} catch (error) {
+	// 		console.error('Chain switch failed:', error);
+	// 		alert('Chain switch failed');
+	// 	}
+	// };
+
 	const switchChain = async (chainId: any) => {
 		try {
 			await walletSdk.ethereum.request({
@@ -77,10 +115,24 @@ export default function useCurrentUser() {
 				params: [{ chainId: chainId }],
 			});
 			setChainId(chainId);
-			alert('Chain switch succeeded:');
-		} catch (error) {
-			console.error('Chain switch failed:', error);
-			alert('Chain switch failed:');
+			alert('Chain switch succeeded');
+		} catch (error: any) {
+			if (error.code === 4902) {
+				// 4902 indicates the chain has not been added
+				try {
+					await walletSdk.ethereum.request({
+						method: 'wallet_addEthereumChain',
+						params: [MAINNET_PARAMS], // Or TESTNET_PARAMS for testnet
+					});
+					setChainId(chainId);
+					alert('Flow EVM successfully added and switched');
+				} catch (addError) {
+					console.error('Adding Flow EVM failed:', addError);
+					alert('Flow EVM could not be added and switched');
+				}
+			} else {
+				console.error('Chain switch failed:', error);
+			}
 		}
 	};
 
