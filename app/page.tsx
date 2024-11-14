@@ -3,7 +3,7 @@
 import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
-	const { user, logIn, logOut } = useAuth();
+	const { userAddr, chainId, logIn, logOut } = useAuth();
 
 	return (
 		<div className="page-container">
@@ -13,14 +13,22 @@ export default function Home() {
 					Connect your wallet to get started
 				</p>
 
-				{user ? (
+				{userAddr ? (
 					<div className="space-y-4">
 						<p className="connected-text">
 							Address:{' '}
 							<span className="connected-username">
-								{user.slice(0, 6)}...{user.slice(-6)}
+								{userAddr.slice(0, 6)}...{userAddr.slice(-6)}
 							</span>
 						</p>
+						{chainId && (
+							<p className="connected-text">
+								ChainId:{' '}
+								<span className="connected-username">
+									{chainId}
+								</span>
+							</p>
+						)}
 						<button
 							onClick={logOut}
 							className="button button-disconnect"

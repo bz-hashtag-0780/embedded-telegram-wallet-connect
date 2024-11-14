@@ -5,7 +5,8 @@ import React, { createContext, useContext } from 'react';
 import useCurrentUser from '@/hooks/use-current-user.hook';
 
 interface AuthContextType {
-	user: any;
+	userAddr: any;
+	chainId: any;
 	logIn: any;
 	logOut: any;
 }
@@ -15,10 +16,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const [user, logIn, logOut] = useCurrentUser();
+	const [userAddr, chainId, logIn, logOut] = useCurrentUser();
 
 	return (
-		<AuthContext.Provider value={{ user, logIn, logOut }}>
+		<AuthContext.Provider value={{ userAddr, chainId, logIn, logOut }}>
 			{children}
 		</AuthContext.Provider>
 	);

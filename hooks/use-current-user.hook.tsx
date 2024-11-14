@@ -6,8 +6,10 @@
 import { useEffect, useState } from 'react';
 
 export default function useCurrentUser() {
-	const [user, setUser] = useState(null);
+	const [userAddr, setUserAddr] = useState(null);
+	const [chainId, setChainId] = useState(null);
 	const [walletSdk, setWalletSdk] = useState<any>(null);
+	const DEFAULT_CHAIN_ID = '0x747'; // Flow EVM Mainnet: 747 Flow EVM Testnet: 545
 
 	useEffect(() => {
 		// Only initialize the SDK on the client
@@ -17,7 +19,7 @@ export default function useCurrentUser() {
 			setWalletSdk(sdk);
 
 			sdk.ethereum.on('accountsChanged', (accounts: any) => {
-				setUser(accounts[0] || null);
+				setUserAddr(accounts[0] || null);
 			});
 		}
 
@@ -33,7 +35,13 @@ export default function useCurrentUser() {
 			const accounts = await walletSdk.ethereum.request({
 				method: 'eth_requestAccounts',
 			});
-			setUser(accounts[0]);
+			setUserAddr(accounts[0]);
+			const chainId = await walletSdk.ethereum.request({
+				method: 'eth_chainId',
+				params: [],
+			});
+			setChainId(chainId);
+			switchChain(DEFAULT_CHAIN_ID);
 		} catch (error) {
 			console.error('Failed to connect wallet:', error);
 		}
@@ -41,8 +49,20 @@ export default function useCurrentUser() {
 
 	const logOut = () => {
 		walletSdk.ethereum.disconnect();
-		setUser(null);
+		setUserAddr(null);
 	};
 
-	return [user, logIn, logOut];
+	const switchChain = async (chainId: any) => {
+		try {
+			await walletSdk.ethereum.request({
+				method: 'wallet_switchEthereumChain',
+				params: [{ chainId: chainId }],
+			});
+			setChainId(chainId);
+		} catch (error) {
+			console.error('Chain switch failed:', error);
+		}
+	};
+
+	return [userAddr, chainId, logIn, logOut];
 }
