@@ -132,6 +132,7 @@ export default function useCurrentUser() {
 				}
 			} else {
 				console.error('Chain switch failed:', error);
+				alert('Chain switch failed');
 			}
 		}
 	};
