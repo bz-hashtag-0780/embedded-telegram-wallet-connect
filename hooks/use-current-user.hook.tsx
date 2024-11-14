@@ -1,17 +1,36 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useEffect, useState } from 'react';
-import { WalletTgSdk } from '@uxuycom/web3-tg-sdk';
 
 export default function useCurrentUser() {
-	const { ethereum } = new WalletTgSdk();
-	const [user, setUser] = useState<any>(null);
+	const [user, setUser] = useState(null);
+	const [walletSdk, setWalletSdk] = useState<any>(null);
+
+	useEffect(() => {
+		// Only initialize the SDK on the client
+		if (typeof window !== 'undefined') {
+			const { WalletTgSdk } = require('@uxuycom/web3-tg-sdk');
+			const sdk = new WalletTgSdk();
+			setWalletSdk(sdk);
+
+			sdk.ethereum.on('accountsChanged', (accounts: any) => {
+				setUser(accounts[0] || null);
+			});
+		}
+
+		return () => {
+			if (walletSdk) {
+				walletSdk.ethereum.removeAllListeners();
+			}
+		};
+	}, []);
 
 	const logIn = async () => {
 		try {
-			const accounts = await ethereum.request({
+			const accounts = await walletSdk.ethereum.request({
 				method: 'eth_requestAccounts',
 			});
 			setUser(accounts[0]);
@@ -21,19 +40,9 @@ export default function useCurrentUser() {
 	};
 
 	const logOut = () => {
-		ethereum.disconnect();
-		setUser(null); // Simply resets user state
+		walletSdk.ethereum.disconnect();
+		setUser(null);
 	};
-
-	useEffect(() => {
-		ethereum.on('accountsChanged', (accounts) => {
-			setUser(accounts[0] || null);
-		});
-
-		return () => {
-			ethereum.removeAllListeners();
-		};
-	}, []);
 
 	return [user, logIn, logOut];
 }
