@@ -10,15 +10,15 @@ export default function Home() {
 			<div className="card">
 				<h1 className="card-title">Connect UXUY Wallet</h1>
 				<p className="card-subtitle">
-					Connect your Telegram wallet to get started
+					Connect your Telegram embedded wallet to get started
 				</p>
 
 				{user ? (
 					<div className="space-y-4">
 						<p className="connected-text">
-							Connected as:{' '}
+							Address:{' '}
 							<span className="connected-username">
-								${user.slice(0, 6)}...${user.slice(-6)}
+								{user.slice(0, 6)}...{user.slice(-6)}
 							</span>
 						</p>
 						<button
