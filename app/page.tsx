@@ -17,7 +17,9 @@ export default function Home() {
 					<div className="space-y-4">
 						<p className="connected-text">
 							Connected as:{' '}
-							<span className="connected-username">{user}</span>
+							<span className="connected-username">
+								${user.slice(0, 6)}...${user.slice(-6)}
+							</span>
 						</p>
 						<button
 							onClick={logOut}
