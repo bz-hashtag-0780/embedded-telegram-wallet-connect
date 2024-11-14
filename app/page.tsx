@@ -10,7 +10,7 @@ export default function Home() {
 			<div className="card">
 				<h1 className="card-title">Connect UXUY Wallet</h1>
 				<p className="card-subtitle">
-					Connect your Telegram embedded wallet to get started
+					Connect your wallet to get started
 				</p>
 
 				{user ? (
